@@ -83,13 +83,22 @@ def test_delete_not_found(client):
 
 def test_get_user_by_id(client):
     # Cria o usuário antes de buscar
-    client.post('/users/', json={
-        "username": "testusername2",
-        "email": "test@test.com",
-        "password": "123"
-    })
+    client.post(
+        '/users/',
+        json={
+            'username': 'testusername2',
+            'email': 'test@test.com',
+            'password': '123',
+        },
+    )
 
     # Agora faz o GET
     response = client.get('/users/1')
 
     assert response.status_code == 200  # noqa: PLR2004
+
+
+def test_get_user_by_id_not_found(client):
+    response = client.get('/users/999')
+
+    assert response.json() == {'detail': 'NOT FOUND'}
